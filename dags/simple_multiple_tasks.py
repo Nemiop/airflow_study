@@ -57,8 +57,10 @@ with DAG(
         """
     )
 
-taskA.set_downstream(taskB)
-taskA.set_downstream(taskC)
+# The same as .set_downstream
+taskA >> taskB
+taskA >> taskC
 
-taskD.set_upstream(taskB)
-taskD.set_upstream(taskC)
+# The same as .set_upstream
+taskD << taskB
+taskD << taskC
