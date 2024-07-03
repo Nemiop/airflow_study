@@ -58,9 +58,7 @@ with DAG(
     )
 
 # The same as .set_downstream
-taskA >> taskB
-taskA >> taskC
+taskA >> [taskB, taskC]
 
 # The same as .set_upstream
-taskD << taskB
-taskD << taskC
+taskD << [taskB, taskC]
