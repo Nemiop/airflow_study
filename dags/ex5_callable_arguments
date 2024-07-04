@@ -1,0 +1,40 @@
+from datetime import timedelta
+
+from airflow import DAG
+from airflow.utils.dates import days_ago
+from airflow.operators.python import PythonOperator
+
+
+def greet_hello(name):
+    print(f"Hello {name}. What a wonderful day and meeting!")
+
+
+def greet_city_with_weather(city, weather):
+    print(f"Good morning, {city}! I fall in love with this {weather} weather!")
+
+default_args = {
+    'owner' : 'redbeast',
+}
+
+with DAG(
+    dag_id = 'ex5_callable_arguments',
+    description = "Call function with kwargs",
+    default_args = default_args,
+    start_date = days_ago(1),
+    schedule_interval = timedelta(days=1),
+    tags = ["op_kwargs", "python"]
+) as dag:
+    
+    taskA = PythonOperator(
+        task_id="greet_hello",
+        python_callable=greet_hello,
+        op_kwargs={"name": "Ruslan"}
+    )
+
+    taskB = PythonOperator(
+        task_id="greeet_city_weather",
+        python_callable=greet_city_with_weather,
+        op_kwargs={"city": "Kharkiv", "weather": "sunny"}
+    )
+
+taskA >> taskB
